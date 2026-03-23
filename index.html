@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Voice Booking</title>
+  <style>
+    body { font-family: Arial; }
+    #transcript { margin-top: 20px; }
+    .user { color: blue; }
+    .agent { color: green; }
+  </style>
+</head>
+<body>
+
+<h2>Select Language</h2>
+
+<button onclick="startCall('ar')">Arabic</button>
+<button onclick="startCall('en')">English</button>
+
+<div id="transcript"></div>
+
+<script type="module">
+  import { Room, RoomEvent } from "https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.esm.mjs";
+
+  const transcriptDiv = document.getElementById("transcript");
+
+  function addMessage(text, sender) {
+    const p = document.createElement("p");
+    p.className = sender;
+    p.textContent = `${sender === "user" ? "🧑" : "🤖"} ${text}`;
+    transcriptDiv.appendChild(p);
+  }
+
+  window.startCall = async function (lang) {
+    try {
+      console.log("🔵 Starting call...");
+
+      const identity = "user_" + Math.floor(Math.random() * 10000);
+      const roomName = "booking-room";
+
+      const res = await fetch(
+        `http://127.0.0.1:8000/livekit-token?identity=${identity}&room=${roomName}&lang=${lang}`
+      );
+
+      const data = await res.json();
+      const token = data.token;
+
+      console.log("🟢 Token received");
+
+      const room = new Room();
+
+      // 🔥 AUDIO
+      room.on(RoomEvent.TrackSubscribed, (track) => {
+        if (track.kind === "audio") {
+          const el = track.attach();
+          document.body.appendChild(el);
+        }
+      });
+
+      // 🔥 🔥 REAL TRANSCRIPT LISTENER
+      room.on(RoomEvent.TranscriptionReceived, (segments, participant) => {
+        segments.forEach(seg => {
+          if (seg.final) {
+            if (participant?.isLocal) {
+              addMessage(seg.text, "user");
+            } else {
+              addMessage(seg.text, "agent");
+            }
+          }
+        });
+      });
+
+      await room.connect(
+        "wss://ai-voice-agent-nuhvffaa.livekit.cloud",
+        token
+      );
+
+      console.log("🟢 Connected to room");
+
+      await room.localParticipant.setMicrophoneEnabled(true);
+
+      console.log("🎤 Microphone enabled");
+
+    } catch (err) {
+      console.error("❌ ERROR:", err);
+    }
+  };
+</script>
+
+</body>
+</html>
