@@ -8,7 +8,10 @@ load_dotenv()
 async def entrypoint(ctx: JobContext):
     await ctx.connect()
 
-    session, assistant = get_agent_ar()
+    room_name = ctx.room.name  # ✅ KEY FIX
+
+    session, assistant = get_agent_ar(room_name)
+
     await session.start(room=ctx.room, agent=assistant)
 
     await session.say("أهلاً وسهلاً! تحب أساعدك ازاي؟")
@@ -23,6 +26,6 @@ if __name__ == "__main__":
         WorkerOptions(
             entrypoint_fnc=entrypoint,
             agent_name="booking-voice-ar",
-            port=8081  # 🔥 explicit
+            port=8081
         )
     )
