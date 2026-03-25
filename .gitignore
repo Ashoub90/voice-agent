@@ -5,9 +5,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
+# Virtual environments
 venv/
-.env/
 .venv/
 env/
 
@@ -15,6 +14,8 @@ env/
 # Environment variables (SECRETS)
 # =========================
 .env
+.env.*
+!.env.example
 
 # =========================
 # OS files
@@ -26,6 +27,9 @@ Thumbs.db
 # Logs
 # =========================
 *.log
+logs/
+*.out
+*.err
 
 # =========================
 # IDE / Editor
@@ -45,11 +49,15 @@ dist/
 # =========================
 .cache/
 .pytest_cache/
+.coverage
+htmlcov/
 
 # =========================
-# Node (just in case later)
+# Node / React
 # =========================
 node_modules/
+voice-ui/node_modules/
+voice-ui/dist/
 
 # =========================
 # Misc
