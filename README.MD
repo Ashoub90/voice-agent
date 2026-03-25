@@ -141,13 +141,12 @@ This project acts as the voice layer for that backend.
 
 ---
 
-## 📌 Future Improvements
+## ⚠️ Challenges & Limitations
 
-- Proper session isolation per user
-- Streaming partial transcripts (reduce lag)
-- Dockerize agents
-- Improve UI (chat-style interface)
-- Multi-channel support (web, mobile, telephony)
+This project involved several non-trivial challenges around real-time voice systems, multilingual handling, and TTS quality.
+
+For a full breakdown, see:
+docs/challenges.md
 
 ---
 
