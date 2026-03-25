@@ -14,7 +14,7 @@ async def entrypoint(ctx: JobContext):
 
     await session.start(room=ctx.room, agent=assistant)
 
-    await session.say("أهلاً وسهلاً! تحب أساعدك ازاي؟")
+    await session.say("أهلاً وسهلاً! كيف يمكنني مساعدتك؟")
 
     import asyncio
     while True:
